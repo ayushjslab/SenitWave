@@ -52,7 +52,7 @@ const googleLogin = useGoogleLogin({
       {/* Navigation */}
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="text-2xl font-bold text-primary">SenitWave</div>
+          <div className="text-2xl font-bold text-primary">EchoMark</div>
           <div className="hidden md:flex gap-8">
             <a
               href="#features"
