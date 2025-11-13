@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {
   ArrowRight,
   MessageCircle,
@@ -8,48 +8,16 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useGoogleLogin } from "@react-oauth/google";
-import axios from "axios";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
+import ProfileMenu from "@/components/custom/profile-menu";
 
 export default function Home() {
-
-
-const googleLogin = useGoogleLogin({
-  onSuccess: async (tokenResponse) => {
-    try {
-      console.log("Google Token Response:", tokenResponse);
-
-      const userInfo = await axios.get(
-        "https://www.googleapis.com/oauth2/v3/userinfo",
-        {
-          headers: {
-            Authorization: `Bearer ${tokenResponse.access_token}`,
-          },
-        }
-      );
-
-      if(userInfo.data){
-        const { data } = await axios.post(`http://localhost:3001/api/user`,{
-          name: userInfo.data.name,
-          email: userInfo.data.email,
-          picture: userInfo.data.picture
-        });
-        console.log(data)
-      }
-
-      console.log("Google User Info:", userInfo.data);
-    } catch (error) {
-      console.error("Error fetching user info:", error);
-    }
-  },
-  onError: (errorResponse) => {
-    console.error("Login Failed:", errorResponse);
-  },
-});
+  const router = useRouter();
+  const { user } = useAuth();
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Navigation */}
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="text-2xl font-bold text-primary">EchoMark</div>
@@ -73,18 +41,23 @@ const googleLogin = useGoogleLogin({
               Pricing
             </a>
           </div>
-          <div className="flex gap-3">
-            <Button variant="ghost" onClick={() => googleLogin()}>
-              Log in
-            </Button>
-            <Button>
-              Get Started
+          <div className="flex items-center justify-center gap-3">
+            {user ? (
+              <ProfileMenu />
+            ) : (
+              <Button variant="ghost" onClick={() => router.push("/login")}>
+                Log in
+              </Button>
+            )}
+            <Button onClick={() => router.push("/dashboard")}>
+              {
+                user ? "Dasboard" : "Get Started"
+              }
             </Button>
           </div>
         </div>
       </nav>
 
-      {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-6 py-20 md:py-32">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6">
@@ -111,7 +84,7 @@ const googleLogin = useGoogleLogin({
             </p>
           </div>
 
-          <div className="bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl p-8 min-h-96 flex items-center justify-center border border-border">
+          <div className="bg-linear-to-br from-primary/10 to-accent/10 rounded-2xl p-8 min-h-96 flex items-center justify-center border border-border">
             <div className="text-center space-y-4">
               <MessageCircle className="w-16 h-16 mx-auto text-primary" />
               <p className="text-muted-foreground">Feedback Widget Preview</p>
@@ -119,7 +92,6 @@ const googleLogin = useGoogleLogin({
           </div>
         </div>
 
-        {/* Social Proof */}
         <div className="mt-20 pt-12 border-t border-border">
           <p className="text-sm text-muted-foreground mb-6">
             Trusted by companies worldwide
@@ -143,7 +115,6 @@ const googleLogin = useGoogleLogin({
         </div>
       </section>
 
-      {/* Features Section */}
       <section id="features" className="max-w-7xl mx-auto px-6 py-20 md:py-32">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -211,7 +182,6 @@ const googleLogin = useGoogleLogin({
         </div>
       </section>
 
-      {/* How It Works Section */}
       <section
         id="how-it-works"
         className="max-w-7xl mx-auto px-6 py-20 md:py-32"
@@ -262,7 +232,6 @@ const googleLogin = useGoogleLogin({
         </div>
       </section>
 
-      {/* Pricing Section */}
       <section id="pricing" className="max-w-7xl mx-auto px-6 py-20 md:py-32">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -354,9 +323,8 @@ const googleLogin = useGoogleLogin({
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="max-w-7xl mx-auto px-6 py-20 md:py-32">
-        <div className="bg-gradient-to-r from-primary/10 to-accent/10 border border-border rounded-2xl p-12 md:p-16 text-center">
+        <div className="bg-linear-to-r from-primary/10 to-accent/10 border border-border rounded-2xl p-12 md:p-16 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             Ready to Listen to Your Customers?
           </h2>
@@ -370,7 +338,6 @@ const googleLogin = useGoogleLogin({
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="border-t border-border py-12 mt-20">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-8 mb-8">

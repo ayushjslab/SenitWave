@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       user = await User.create({ name, email, picture });
     }
 
-    const payload = { id: user._id, email: user.email, name: user.name };
+    const payload = { id: user._id, email: user.email, name: user.name, picture: user.picture };
     const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
 
     const response = NextResponse.json(

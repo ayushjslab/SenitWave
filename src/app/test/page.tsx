@@ -1,13 +1,17 @@
-import AddWebsitePage from "@/components/custom/add-website";
-import Sidebar from "@/components/custom/sidebar";
+"use client";
 
-export default function Home() {
+import { useAuth } from "@/hooks/useAuth";
+
+export default function Dashboard() {
+  const { user, loading, error } = useAuth();
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
+
   return (
-    <div className="flex">
-      <Sidebar />
-      <main className="ml-20 flex-1 p-8">
-        <AddWebsitePage />
-      </main>
+    <div>
+      <h1>Welcome, {user?.name}</h1>
+      <p>Email: {user?.email}</p>
     </div>
   );
 }
