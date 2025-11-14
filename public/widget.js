@@ -373,6 +373,8 @@ function showToast(message, type = "info") {
           }),
         });
 
+        console.log(response)
+
         if (!response.ok) throw new Error("Failed to submit feedback");
 
         showToast("Thank you for your feedback! 🎉", "success");

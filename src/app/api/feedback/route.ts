@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
     console.error("Error saving feedback:", error);
     return NextResponse.json(
       { success: false, message: "Server error" },
-      { status: 500, headers: corsHeaders } // ← FIXED
+      { status: 500, headers: corsHeaders }
     );
   }
 }
