@@ -45,7 +45,7 @@ export default function AddWebsitePage({ userId }: { userId: string | null }) {
 
       const newSiteId = data.data._id;
 
-      const script = `<script src="https://echomark.vercel.app/widget.js?siteId=${newSiteId}"  strategy="afterInteractive"></script>`;
+      const script = `<script src="${process.env.NEXT_PUBLIC_WEBSITE_URI}/widget.js?siteId=${newSiteId}"  strategy="afterInteractive"></script>`;
       setGeneratedScript(script);
 
       setStep(2);
