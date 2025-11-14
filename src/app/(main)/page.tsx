@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import {
@@ -13,6 +14,10 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import ProfileMenu from "@/components/custom/profile-menu";
 import { HowItWorks } from "@/components/custom/how-it-works";
+import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
+import { SiThreads } from "react-icons/si";
+import { HiOutlineGlobeAlt } from "react-icons/hi2";
 
 export default function Home() {
   const router = useRouter();
@@ -72,11 +77,18 @@ export default function Home() {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" asChild>
-                <Link href="/signup">Start Free Trial</Link>
-              </Button>
+             <Button size="lg" asChild>
+            {user ? (
+              <Link href="/dashboard">Get Started</Link>
+            ) : (
+              <Link href="/login">Start Free Trial</Link>
+            )}
+          </Button>
               <Button size="lg" variant="outline">
-                Watch Demo <ArrowRight className="ml-2 w-4 h-4" />
+                <Link href="#watch-demo" className="flex items-center justify-center">
+                  {" "}
+                  Watch Demo <ArrowRight className="ml-2 w-4 h-4" />
+                </Link>
               </Button>
             </div>
             <p className="text-sm text-muted-foreground">
@@ -183,7 +195,9 @@ export default function Home() {
         </div>
       </section>
 
-      <HowItWorks/>
+      <section id="watch-demo">
+        <HowItWorks />
+      </section>
 
       <section
         id="how-it-works"
@@ -333,97 +347,166 @@ export default function Home() {
             feedback into growth
           </p>
           <Button size="lg" asChild>
-            <Link href="/signup">Start Your Free Trial</Link>
+            {user ? (
+              <Link href="/dashboard">Get Started</Link>
+            ) : (
+              <Link href="/login">Start Your Free Trial</Link>
+            )}
           </Button>
         </div>
       </section>
 
-      <footer className="border-t border-border py-12 mt-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h4 className="font-bold text-foreground mb-4">SenitWave</h4>
-              <p className="text-sm text-muted-foreground">
-                Customer feedback made simple and powerful.
-              </p>
-            </div>
-            <div>
-              <h5 className="font-semibold text-foreground mb-4">Product</h5>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <a href="#" className="hover:text-primary transition">
-                    Features
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary transition">
-                    Pricing
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary transition">
-                    FAQ
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h5 className="font-semibold text-foreground mb-4">Company</h5>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <a href="#" className="hover:text-primary transition">
-                    About
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary transition">
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary transition">
-                    Careers
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h5 className="font-semibold text-foreground mb-4">Legal</h5>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <a href="#" className="hover:text-primary transition">
-                    Privacy
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary transition">
-                    Terms
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-primary transition">
-                    Contact
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-border pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-muted-foreground">
-            <p>&copy; 2025 SenitWave. All rights reserved.</p>
-            <div className="flex gap-6 mt-4 md:mt-0">
-              <a href="#" className="hover:text-primary transition">
-                Twitter
-              </a>
-              <a href="#" className="hover:text-primary transition">
-                LinkedIn
-              </a>
-              <a href="#" className="hover:text-primary transition">
-                GitHub
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <footer className="border-t border-border/60 py-16 mt-24 bg-white">
+  <div className="max-w-7xl mx-auto px-6">
+    
+    {/* TOP SECTION */}
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+      
+      {/* Brand */}
+      <div>
+        <h4 className="text-2xl font-extrabold text-foreground tracking-tight">
+          EchoMark
+        </h4>
+        <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
+          Turn customer voices into actionable insights with real-time feedback and analytics.
+        </p>
+      </div>
+
+      {/* Company */}
+      <div>
+        <h5 className="font-semibold text-foreground mb-4 text-lg">Company</h5>
+        <ul className="space-y-3 text-sm text-muted-foreground">
+          <li>
+            <a href="https://ayushjslab.vercel.app" className="hover:text-primary transition">
+              About
+            </a>
+          </li>
+          <li>
+            <a href="#" className="hover:text-primary transition">
+              Blog
+            </a>
+          </li>
+          <li>
+            <a href="#" className="hover:text-primary transition">
+              Careers
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      {/* Product */}
+      <div>
+        <h5 className="font-semibold text-foreground mb-4 text-lg">Product</h5>
+        <ul className="space-y-3 text-sm text-muted-foreground">
+          <li>
+            <a href="/dashboard" className="hover:text-primary transition">
+              Dashboard
+            </a>
+          </li>
+          <li>
+            <a href="/pricing" className="hover:text-primary transition">
+              Pricing
+            </a>
+          </li>
+          <li>
+            <a href="/docs" className="hover:text-primary transition">
+              Documentation
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      {/* Legal */}
+      <div>
+        <h5 className="font-semibold text-foreground mb-4 text-lg">Legal</h5>
+        <ul className="space-y-3 text-sm text-muted-foreground">
+          <li>
+            <a href="/privacy" className="hover:text-primary transition">
+              Privacy Policy
+            </a>
+          </li>
+          <li>
+            <a href="/terms" className="hover:text-primary transition">
+              Terms & Conditions
+            </a>
+          </li>
+          <li>
+            <a href="/contact" className="hover:text-primary transition">
+              Contact
+            </a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+
+    {/* BOTTOM SECTION */}
+    <div className="border-t border-border/50 pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-muted-foreground">
+      <p className="text-center md:text-left">
+        © 2025 EchoMark — Crafted with passion for creators & businesses.
+      </p>
+
+      {/* Social Icons */}
+      <div className="flex gap-6 mt-6 md:mt-0 text-2xl text-foreground/80">
+        <a
+          href="https://www.linkedin.com/in/ayushjslab/"
+          target="_blank"
+          aria-label="LinkedIn"
+          className="hover:text-primary transition"
+        >
+          <FaLinkedin />
+        </a>
+
+        <a
+          href="https://github.com/ayushjslab"
+          target="_blank"
+          aria-label="GitHub"
+          className="hover:text-primary transition"
+        >
+          <FaGithub />
+        </a>
+
+        <a
+          href="https://x.com/ayushjslab"
+          target="_blank"
+          aria-label="X Twitter"
+          className="hover:text-primary transition"
+        >
+          <FaXTwitter />
+        </a>
+
+        <a
+          href="https://www.instagram.com/ayushjslab"
+          target="_blank"
+          aria-label="Instagram"
+          className="hover:text-primary transition"
+        >
+          <FaInstagram />
+        </a>
+
+        <a
+          href="https://www.thread.com/ayushjslab"
+          target="_blank"
+          aria-label="Threads"
+          className="hover:text-primary transition"
+        >
+          <SiThreads />
+        </a>
+
+        <a
+          href="https://ayushjslab.vercel.app"
+          target="_blank"
+          aria-label="Portfolio"
+          className="hover:text-primary transition"
+        >
+          <HiOutlineGlobeAlt />
+        </a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
     </main>
   );
 }

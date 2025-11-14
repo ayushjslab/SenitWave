@@ -67,7 +67,7 @@ function showToast(message, type = "info") {
     }
 
     try {
-      const res = await fetch(`http://localhost:3000/api/validate-site`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/validate-site`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ siteId }),
@@ -361,7 +361,7 @@ function showToast(message, type = "info") {
       var rating = Number(ratingInput.value);
 
       try {
-        var response = await fetch("http://localhost:3000/api/feedback", {
+        var response = await fetch(`${process.env.NEXT_PUBLIC_WEBSITE_URI}/api/feedback`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
