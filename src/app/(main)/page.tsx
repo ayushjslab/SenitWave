@@ -28,7 +28,7 @@ export default function Home() {
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="text-2xl font-bold text-primary flex items-center gap-2">
-            <img src="/images/logo.png" alt="echomark-logo" className="h-12" />
+            <img src="/images/logo.png" alt="echomark-logo" className="h-12 hidden sm:block" />
             EchoMark
           </div>
           <div className="hidden md:flex gap-8">
