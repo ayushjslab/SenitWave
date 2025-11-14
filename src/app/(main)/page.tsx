@@ -27,7 +27,10 @@ export default function Home() {
     <main className="min-h-screen bg-background">
       <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="text-2xl font-bold text-primary">EchoMark</div>
+          <div className="text-2xl font-bold text-primary flex items-center gap-2">
+            <img src="/images/logo.png" alt="echomark-logo" className="h-12" />
+            EchoMark
+          </div>
           <div className="hidden md:flex gap-8">
             <a
               href="#features"
@@ -77,15 +80,18 @@ export default function Home() {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
-             <Button size="lg" asChild>
-            {user ? (
-              <Link href="/dashboard">Get Started</Link>
-            ) : (
-              <Link href="/login">Start Free Trial</Link>
-            )}
-          </Button>
+              <Button size="lg" asChild>
+                {user ? (
+                  <Link href="/dashboard">Get Started</Link>
+                ) : (
+                  <Link href="/login">Start Free Trial</Link>
+                )}
+              </Button>
               <Button size="lg" variant="outline">
-                <Link href="#watch-demo" className="flex items-center justify-center">
+                <Link
+                  href="#watch-demo"
+                  className="flex items-center justify-center"
+                >
                   {" "}
                   Watch Demo <ArrowRight className="ml-2 w-4 h-4" />
                 </Link>
@@ -356,157 +362,136 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="border-t border-border/60 py-16 mt-24 bg-white">
-  <div className="max-w-7xl mx-auto px-6">
-    
-    {/* TOP SECTION */}
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-      
-      {/* Brand */}
-      <div>
-        <h4 className="text-2xl font-extrabold text-foreground tracking-tight">
-          EchoMark
-        </h4>
-        <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
-          Turn customer voices into actionable insights with real-time feedback and analytics.
-        </p>
-      </div>
+      <footer className="border-t border-border/60 py-20 mt-28 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          {/* TOP SECTION */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-20">
+            {/* Brand */}
+            <div>
+              <h4 className="text-3xl font-extrabold text-foreground tracking-tight">
+                EchoMark
+              </h4>
+              <p className="text-base text-muted-foreground mt-4 leading-relaxed max-w-sm">
+                Transform customer voices into powerful insights with real-time
+                feedback, analytics, and automation.
+              </p>
+            </div>
 
-      {/* Company */}
-      <div>
-        <h5 className="font-semibold text-foreground mb-4 text-lg">Company</h5>
-        <ul className="space-y-3 text-sm text-muted-foreground">
-          <li>
-            <a href="https://ayushjslab.vercel.app" className="hover:text-primary transition">
-              About
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:text-primary transition">
-              Blog
-            </a>
-          </li>
-          <li>
-            <a href="#" className="hover:text-primary transition">
-              Careers
-            </a>
-          </li>
-        </ul>
-      </div>
+            {/* Product */}
+            <div>
+              <h5 className="font-semibold text-foreground mb-5 text-lg">
+                Explore
+              </h5>
+              <ul className="space-y-4 text-base text-muted-foreground">
+                <li>
+                  <a
+                    href="/dashboard"
+                    className="hover:text-primary transition"
+                  >
+                    Dashboard
+                  </a>
+                </li>
+                <li>
+                  <a href="#pricing" className="hover:text-primary transition">
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a href="#watch-demo" className="hover:text-primary transition">
+                    Documentation
+                  </a>
+                </li>
+              </ul>
+            </div>
 
-      {/* Product */}
-      <div>
-        <h5 className="font-semibold text-foreground mb-4 text-lg">Product</h5>
-        <ul className="space-y-3 text-sm text-muted-foreground">
-          <li>
-            <a href="/dashboard" className="hover:text-primary transition">
-              Dashboard
-            </a>
-          </li>
-          <li>
-            <a href="/pricing" className="hover:text-primary transition">
-              Pricing
-            </a>
-          </li>
-          <li>
-            <a href="/docs" className="hover:text-primary transition">
-              Documentation
-            </a>
-          </li>
-        </ul>
-      </div>
+            {/* Legal */}
+            <div>
+              <h5 className="font-semibold text-foreground mb-5 text-lg">
+                Legal
+              </h5>
+              <ul className="space-y-4 text-base text-muted-foreground">
+                <li>
+                  <a href="/privacy" className="hover:text-primary transition">
+                    Privacy Policy
+                  </a>
+                </li>
+                <li>
+                  <a href="/terms" className="hover:text-primary transition">
+                    Terms & Conditions
+                  </a>
+                </li>
+                <li>
+                  <a href="/contact" className="hover:text-primary transition">
+                    Contact
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
 
-      {/* Legal */}
-      <div>
-        <h5 className="font-semibold text-foreground mb-4 text-lg">Legal</h5>
-        <ul className="space-y-3 text-sm text-muted-foreground">
-          <li>
-            <a href="/privacy" className="hover:text-primary transition">
-              Privacy Policy
-            </a>
-          </li>
-          <li>
-            <a href="/terms" className="hover:text-primary transition">
-              Terms & Conditions
-            </a>
-          </li>
-          <li>
-            <a href="/contact" className="hover:text-primary transition">
-              Contact
-            </a>
-          </li>
-        </ul>
-      </div>
+          {/* DIVIDER */}
+          <div className="border-t border-border/40 pt-8"></div>
 
-    </div>
+          {/* BOTTOM SECTION */}
+          <div className="flex flex-col md:flex-row items-center justify-between pt-6 text-sm text-muted-foreground">
+            <p className="text-center md:text-left">
+              © 2025 EchoMark — Built with precision for modern creators.
+            </p>
 
-    {/* BOTTOM SECTION */}
-    <div className="border-t border-border/50 pt-8 flex flex-col md:flex-row items-center justify-between text-sm text-muted-foreground">
-      <p className="text-center md:text-left">
-        © 2025 EchoMark — Crafted with passion for creators & businesses.
-      </p>
-
-      {/* Social Icons */}
-      <div className="flex gap-6 mt-6 md:mt-0 text-2xl text-foreground/80">
-        <a
-          href="https://www.linkedin.com/in/ayushjslab/"
-          target="_blank"
-          aria-label="LinkedIn"
-          className="hover:text-primary transition"
-        >
-          <FaLinkedin />
-        </a>
-
-        <a
-          href="https://github.com/ayushjslab"
-          target="_blank"
-          aria-label="GitHub"
-          className="hover:text-primary transition"
-        >
-          <FaGithub />
-        </a>
-
-        <a
-          href="https://x.com/ayushjslab"
-          target="_blank"
-          aria-label="X Twitter"
-          className="hover:text-primary transition"
-        >
-          <FaXTwitter />
-        </a>
-
-        <a
-          href="https://www.instagram.com/ayushjslab"
-          target="_blank"
-          aria-label="Instagram"
-          className="hover:text-primary transition"
-        >
-          <FaInstagram />
-        </a>
-
-        <a
-          href="https://www.thread.com/ayushjslab"
-          target="_blank"
-          aria-label="Threads"
-          className="hover:text-primary transition"
-        >
-          <SiThreads />
-        </a>
-
-        <a
-          href="https://ayushjslab.vercel.app"
-          target="_blank"
-          aria-label="Portfolio"
-          className="hover:text-primary transition"
-        >
-          <HiOutlineGlobeAlt />
-        </a>
-      </div>
-    </div>
-
-  </div>
-</footer>
-
+            {/* Social Icons */}
+            <div className="flex gap-6 mt-6 md:mt-0 text-2xl text-foreground/80">
+              <a
+                href="https://www.linkedin.com/in/ayushjslab/"
+                target="_blank"
+                aria-label="LinkedIn"
+                className="hover:text-primary transition"
+              >
+                <FaLinkedin />
+              </a>
+              <a
+                href="https://github.com/ayushjslab"
+                target="_blank"
+                aria-label="GitHub"
+                className="hover:text-primary transition"
+              >
+                <FaGithub />
+              </a>
+              <a
+                href="https://x.com/ayushjslab"
+                target="_blank"
+                aria-label="X Twitter"
+                className="hover:text-primary transition"
+              >
+                <FaXTwitter />
+              </a>
+              <a
+                href="https://www.instagram.com/ayushjslab"
+                target="_blank"
+                aria-label="Instagram"
+                className="hover:text-primary transition"
+              >
+                <FaInstagram />
+              </a>
+              <a
+                href="https://www.thread.com/ayushjslab"
+                target="_blank"
+                aria-label="Threads"
+                className="hover:text-primary transition"
+              >
+                <SiThreads />
+              </a>
+              <a
+                href="https://ayushjslab.vercel.app"
+                target="_blank"
+                aria-label="Portfolio"
+                className="hover:text-primary transition"
+              >
+                <HiOutlineGlobeAlt />
+              </a>
+            </div>
+          </div>
+        </div>
+      </footer>
     </main>
   );
 }
