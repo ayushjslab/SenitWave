@@ -4,7 +4,7 @@ import { FeedbackAnalytics } from "@/components/custom/feedback-analytics";
 import { useParams } from "next/navigation";
 
 const AnalysisPage = () => {
-  const { websiteId } = useParams(); 
+  const { websiteId } = useParams();
 
   return (
     <div className="ml-22">

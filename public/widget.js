@@ -131,6 +131,18 @@ function showToast(message, type = "info") {
 
     document.body.appendChild(btn);
 
+    const res = await fetch(`https://echomark.vercel.app/api/website/fetch-styles?websiteId=${siteId}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!res.ok) throw new Error("Failed to validate site ID");
+
+    const data = await res.json();
+    const formStyles = data.formStyles;
+
+    console.log(formStyles)
+
     var modal = document.createElement("div");
     Object.assign(modal.style, {
       display: "none",

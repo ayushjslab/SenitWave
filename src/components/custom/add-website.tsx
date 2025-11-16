@@ -53,7 +53,7 @@ export default function AddWebsitePage({ userId }: { userId: string | null }) {
       console.error(err);
       toast.error("Something went wrong. Please try again.");
     } finally {
-      setLoading(false); // stop loading
+      setLoading(false);
     }
   };
 

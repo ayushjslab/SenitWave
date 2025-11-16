@@ -7,6 +7,7 @@ import ProfilePage from "@/components/custom/profile";
 import AddedWebsites from "@/components/custom/added-websites";
 import SettingsPage from "@/components/custom/setting";
 import { ComingSoonBilling } from "@/components/custom/billing";
+import CustomizeWebsites from "@/components/custom/customize-websites";
 
 const AddWebsite = dynamic(() => import("@/components/custom/add-website"));
 
@@ -27,8 +28,10 @@ export default function DashboardPageClient() {
         return <AddedWebsites />;
       case "settings":
         return <SettingsPage />;
-    case "billing":
-        return <ComingSoonBilling/>
+      case "customize":
+        return <CustomizeWebsites />;
+      case "billing":
+        return <ComingSoonBilling />;
       default:
         return <p>Page not found</p>;
     }

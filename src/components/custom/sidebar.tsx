@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, BarChart3, Settings, User, CreditCard } from "lucide-react";
+import {
+  Plus,
+  BarChart3,
+  Settings,
+  User,
+  CreditCard,
+  Palette,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -15,6 +22,7 @@ export default function Sidebar() {
     { icon: BarChart3, label: "Analysis", slug: "analysis" },
     { icon: Settings, label: "Settings", slug: "settings" },
     { icon: User, label: "Profile", slug: "profile" },
+    { icon: Palette, label: "Customization", slug: "customize" },
     { icon: CreditCard, label: "Billing", slug: "billing" },
   ];
 
