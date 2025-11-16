@@ -102,7 +102,7 @@
 
     if (!response.ok) throw new Error("Failed to validate site ID");
 
-    const resData = await res.json();
+    const resData = await response.json();
     const buttonStyles = resData.buttonStyles;
     console.log(buttonStyles)
     var btn = document.createElement("button");
