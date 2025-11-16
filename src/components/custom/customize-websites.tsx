@@ -59,7 +59,6 @@ const CustomizeWebsites = () => {
         </span>
       </div>
 
-      {/* Content */}
       {loadingSites ? (
         <p className="text-gray-500">Loading websites...</p>
       ) : websites.length === 0 ? (
