@@ -17,7 +17,8 @@ export default function AddWebsitePage({ userId }: { userId: string | null }) {
   const [step, setStep] = useState(1);
   const [siteName, setSiteName] = useState("");
   const [siteUrl, setSiteUrl] = useState("");
-  const [generatedScript, setGeneratedScript] = useState("");
+  const [nextScript, setNextScript] = useState("");
+  const [htmlScript, setHtmlScript] = useState("");
   const [copied, setCopied] = useState(false);
   const scriptRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(false);
@@ -45,8 +46,19 @@ export default function AddWebsitePage({ userId }: { userId: string | null }) {
 
       const newSiteId = data.data._id;
 
-      const script = `<script src="${process.env.NEXT_PUBLIC_WEBSITE_URI}/widget.js?siteId=${newSiteId}"  strategy="afterInteractive"></script>`;
-      setGeneratedScript(script);
+      setNextScript(`<Script 
+  src="${process.env.NEXT_PUBLIC_WEBSITE_URI}/widget.js?siteId=${newSiteId}"
+  strategy="afterInteractive"
+/>`);
+
+      setHtmlScript(
+        `
+        <script>
+          window.WIDGET_SITE_ID="${newSiteId}";
+        </script>
+
+        <script src="${process.env.NEXT_PUBLIC_WEBSITE_URI}/widget.js"></script>`
+      );
 
       setStep(2);
     } catch (err) {
@@ -57,10 +69,21 @@ export default function AddWebsitePage({ userId }: { userId: string | null }) {
     }
   };
 
-  const handleCopy = async () => {
-    if (!generatedScript) return;
+  const handleHtmlScriptCopy = async () => {
+    if (!htmlScript) return;
     try {
-      await navigator.clipboard.writeText(generatedScript);
+      await navigator.clipboard.writeText(htmlScript);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
+  };
+
+  const handleNextScriptCopy = async () => {
+    if (!nextScript) return;
+    try {
+      await navigator.clipboard.writeText(nextScript);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -71,7 +94,6 @@ export default function AddWebsitePage({ userId }: { userId: string | null }) {
   const handleReset = () => {
     setSiteName("");
     setSiteUrl("");
-    setGeneratedScript("");
     setStep(1);
     setCopied(false);
   };
@@ -132,7 +154,7 @@ export default function AddWebsitePage({ userId }: { userId: string | null }) {
 
               <button
                 onClick={handleGenerate}
-                disabled={!siteName || !siteUrl || loading} // disable while loading
+                disabled={!siteName || !siteUrl || loading || htmlScript !== ""}
                 className="w-full bg-linear-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-4"
               >
                 {loading ? (
@@ -181,7 +203,7 @@ export default function AddWebsitePage({ userId }: { userId: string | null }) {
         </div>
 
         <div>
-          {generatedScript ? (
+          {htmlScript && nextScript ? (
             <div className="space-y-6">
               <div className="bg-linear-to-br from-emerald-50 to-white rounded-2xl border-2 border-emerald-200 p-8 text-center space-y-4">
                 <div className="flex justify-center">
@@ -199,16 +221,17 @@ export default function AddWebsitePage({ userId }: { userId: string | null }) {
                 </div>
               </div>
 
+
               <div
                 ref={scriptRef}
                 className="bg-gray-900 rounded-xl overflow-hidden shadow-2xl border border-emerald-500/20"
               >
                 <div className="flex items-center justify-between bg-gray-800 px-4 py-3 border-b border-gray-700">
                   <span className="text-xs font-mono text-gray-400">
-                    tracking-script.js
+                    Nextjs Script
                   </span>
                   <button
-                    onClick={handleCopy}
+                    onClick={handleNextScriptCopy}
                     className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
                       copied
                         ? "bg-emerald-600 text-white"
@@ -229,10 +252,42 @@ export default function AddWebsitePage({ userId }: { userId: string | null }) {
                   </button>
                 </div>
                 <div className="p-4 font-mono text-sm text-emerald-400 overflow-x-auto">
-                  <code className="block">{generatedScript}</code>
+                  <code className="block">{nextScript}</code>
                 </div>
               </div>
-
+              <div
+                ref={scriptRef}
+                className="bg-gray-900 rounded-xl overflow-hidden shadow-2xl border border-emerald-500/20"
+              >
+                <div className="flex items-center justify-between bg-gray-800 px-4 py-3 border-b border-gray-700">
+                  <span className="text-xs font-mono text-gray-400">
+                    HTML, React, etc...
+                  </span>
+                  <button
+                    onClick={handleHtmlScriptCopy}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                      copied
+                        ? "bg-emerald-600 text-white"
+                        : "bg-gray-700 text-gray-300 hover:bg-gray-600"
+                    }`}
+                  >
+                    {copied ? (
+                      <>
+                        <Check size={16} />
+                        <span>Copied!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={16} />
+                        <span>Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <div className="p-4 font-mono text-sm text-emerald-400 overflow-x-auto">
+                  <code className="block">{htmlScript}</code>
+                </div>
+              </div>
               <div className="bg-white rounded-xl border border-emerald-200 p-6">
                 <h4 className="font-semibold text-gray-900 mb-4">
                   Next Steps:

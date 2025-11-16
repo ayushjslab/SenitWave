@@ -29,6 +29,9 @@ export default function ProfilePage() {
   const [loadingSites, setLoadingSites] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedWebsite, setSelectedWebsite] = useState<Website | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [websiteToDelete, setWebsiteToDelete] = useState<Website | null>(null);
+const [confirmName, setConfirmName] = useState("");
 
   useEffect(() => {
     async function fetchWebsites() {
@@ -152,7 +155,10 @@ export default function ProfilePage() {
                     <Pencil size={16} />
                   </button>
                   <button
-                    onClick={() => handleDelete(site._id)}
+                    onClick={() => {
+                      setWebsiteToDelete(site);
+                      setDeleteDialogOpen(true);
+                    }}
                     className="p-2 rounded-full bg-red-50 text-red-600 hover:bg-red-100 transition"
                     title="Delete"
                   >
@@ -176,6 +182,90 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
+
+      {websiteToDelete && (
+        <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+          <DialogContent className="sm:max-w-md bg-white rounded-3xl border border-red-200 shadow-xl">
+            <DialogHeader>
+              <DialogTitle className="text-red-600 font-extrabold text-2xl flex items-center gap-2">
+                ⚠️ Delete Website
+              </DialogTitle>
+            </DialogHeader>
+
+            <div className="mt-4 space-y-4">
+              <p className="text-gray-700 leading-relaxed">
+                You are about to permanently remove&nbsp;
+                <span className="font-semibold text-red-600">
+                  {websiteToDelete.websiteName}
+                </span>
+                .
+                <br />
+                This action{" "}
+                <span className="font-bold text-red-600">cannot be undone</span>
+                .
+              </p>
+
+              <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm font-medium">
+                ⚠ All feedback associated with this website will also be
+                permanently deleted.
+              </div>
+
+              {/* Input field for confirmation */}
+              <div>
+                <label className="text-sm font-medium text-gray-700">
+                  Type the website name to confirm:
+                </label>
+                <Input
+                  placeholder={websiteToDelete.websiteName}
+                  className="mt-1 border-red-200 focus-visible:ring-red-400"
+                  value={confirmName}
+                  onChange={(e) => setConfirmName(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <DialogFooter className="mt-6 flex justify-end gap-3">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setConfirmName("");
+                  setDeleteDialogOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                className={`bg-red-600 hover:bg-red-700 text-white ${
+                  confirmName !== websiteToDelete.websiteName
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
+                disabled={confirmName !== websiteToDelete.websiteName}
+                onClick={async () => {
+                  try {
+                    await axios.delete(
+                      `/api/website/delete/${websiteToDelete._id}`
+                    );
+                    toast.success("Website deleted successfully!");
+                    setWebsites((prev) =>
+                      prev.filter((w) => w._id !== websiteToDelete._id)
+                    );
+                  } catch (error) {
+                    console.error("Delete error:", error);
+                    toast.error("Failed to delete website.");
+                  } finally {
+                    setConfirmName("");
+                    setDeleteDialogOpen(false);
+                  }
+                }}
+              >
+                Delete Permanently
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
 
       {selectedWebsite && (
         <EditWebsiteDialog

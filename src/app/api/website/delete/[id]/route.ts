@@ -1,27 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDB } from "@/lib/connectDB";
 import Website from "@/models/website.model";
+import Feedback from "@/models/feedback.model";
 
 export async function DELETE(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = await context.params; 
+    const { id } = await context.params;
+
     await connectToDB();
 
-    const deleted = await Website.findByIdAndDelete(id);
+    // Delete website
+    const deletedWebsite = await Website.findByIdAndDelete(id);
 
-    if (!deleted) {
+    if (!deletedWebsite) {
       return NextResponse.json(
         { success: false, message: "Website not found" },
         { status: 404 }
       );
     }
 
+    await Feedback.deleteMany({ website: id });
+
     return NextResponse.json({
       success: true,
-      message: "Website deleted successfully",
+      message: "Website and all feedback deleted successfully",
     });
   } catch (error) {
     console.error("Delete error:", error);
