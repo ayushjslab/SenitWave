@@ -185,8 +185,8 @@ function showToast(message, type = "info") {
     <h3 style="
       margin:0;
       font-size:22px;
-      color: ${formStyles.headingColor}
       font-weight:700;
+      color: ${formStyles.headingColor}
     "> ${formStyles.heading}</h3>
     <button id="closeBtn" style="
       background:none;
