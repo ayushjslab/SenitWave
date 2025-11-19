@@ -106,125 +106,159 @@ export function FeedbackAnalytics({websiteId}: {websiteId: string}) {
 
 
   const analytics = useMemo(() => {
-    if (!feedbacks || feedbacks.length === 0) {
-      return {
-        totalFeedback: 0,
-        avgRating: 0,
-        positivePercent: 0,
-        growthRate: 0,
-        ratingDistribution: [],
-        sentimentData: [],
-        ratingCounts: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
-        positiveCount: 0,
-        negativeCount: 0,
-        trendData: [],
-      };
-    }
-
-    const totalFeedback = feedbacks.length;
-
-    const avgRating = Number(
-      (
-        feedbacks.reduce((sum: number, f: any) => sum + f.rating, 0) /
-        totalFeedback
-      ).toFixed(1)
-    );
-
-    const ratingCounts = {
-      5: feedbacks.filter((f: any) => f.rating === 5).length,
-      4: feedbacks.filter((f: any) => f.rating === 4).length,
-      3: feedbacks.filter((f: any) => f.rating === 3).length,
-      2: feedbacks.filter((f: any) => f.rating === 2).length,
-      1: feedbacks.filter((f: any) => f.rating === 1).length,
-    };
-
-    const positiveCount = ratingCounts[5] + ratingCounts[4];
-    const neutralCount = ratingCounts[3];
-    const negativeCount = ratingCounts[2] + ratingCounts[1];
-
-    const positivePercent = Number(
-      ((positiveCount / totalFeedback) * 100).toFixed(1)
-    );
-
-    const now = dayjs();
-    const feedbacksThisMonth = feedbacks.filter((f: any) =>
-      dayjs(f.createdAt).isAfter(now.subtract(30, "day"))
-    ).length;
-
-    const feedbacksLastMonth = feedbacks.filter(
-      (f: any) =>
-        dayjs(f.createdAt).isAfter(now.subtract(60, "day")) &&
-        dayjs(f.createdAt).isBefore(now.subtract(30, "day"))
-    ).length;
-
-    let growthRate = 0;
-    if (feedbacksLastMonth > 0) {
-      growthRate =
-        ((feedbacksThisMonth - feedbacksLastMonth) / feedbacksLastMonth) * 100;
-    } else if (feedbacksThisMonth > 0) {
-      growthRate = 100; // new growth
-    }
-    growthRate = Number(growthRate.toFixed(2));
-
-    const ratingDistribution = [
-      { name: "5★", value: ratingCounts[5], fill: "#10B981" },
-      { name: "4★", value: ratingCounts[4], fill: "#34D399" },
-      { name: "3★", value: ratingCounts[3], fill: "#6EE7B7" },
-      { name: "2★", value: ratingCounts[2], fill: "#FCD34D" },
-      { name: "1★", value: ratingCounts[1], fill: "#EF4444" },
-    ];
-
-    // Sentiment breakdown for PieChart
-    const sentimentData = [
-      { name: "Positive", value: positiveCount, fill: "#10B981" },
-      { name: "Neutral", value: neutralCount, fill: "#6EE7B7" },
-      { name: "Negative", value: negativeCount, fill: "#EF4444" },
-    ];
-
-    // Trend data (group by date)
-    const trendMap: Record<string, { feedback: number; totalRating: number }> =
-      {};
-    feedbacks.forEach((f: any) => {
-      const date = dayjs(f.createdAt).format("MMM DD");
-      if (!trendMap[date]) trendMap[date] = { feedback: 0, totalRating: 0 };
-      trendMap[date].feedback++;
-      trendMap[date].totalRating += f.rating;
-    });
-
-    const trendData = Object.keys(trendMap).map((date) => ({
-      date,
-      feedback: trendMap[date].feedback,
-      rating: Number(
-        (trendMap[date].totalRating / trendMap[date].feedback).toFixed(1)
-      ),
-    }));
-
+  if (!feedbacks || feedbacks.length === 0) {
     return {
-      totalFeedback,
-      avgRating,
-      positivePercent,
-      growthRate,
-      ratingDistribution,
-      sentimentData,
-      ratingCounts,
-      positiveCount,
-      negativeCount,
-      trendData,
+      totalFeedback: 0,
+      avgRating: 0,
+      positivePercent: 0,
+      growthRate: 0,
+      ratingDistribution: [],
+      sentimentData: [],
+      ratingCounts: { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+      positiveCount: 0,
+      negativeCount: 0,
+      neutralCount: 0,
+      trendData: [],
     };
-  }, [feedbacks]);
+  }
+
+  const totalFeedback = feedbacks.length;
+
+  // -------------------------
+  // ⭐ Optimized Rating Counts
+  // -------------------------
+type RatingKey = 1 | 2 | 3 | 4 | 5;
+
+const ratingCounts: Record<RatingKey, number> = {
+  1: 0,
+  2: 0,
+  3: 0,
+  4: 0,
+  5: 0,
+};
+
+let sumRating = 0;
+
+feedbacks.forEach((f: any) => {
+  const r = Number(f.rating) as RatingKey;
+
+  // validate rating is between 1–5 only
+  if (r >= 1 && r <= 5) {
+    ratingCounts[r]++;
+    sumRating += r;
+  }
+});
+
+  const avgRating = Number((sumRating / totalFeedback).toFixed(1));
+
+  // --------------------------
+  // ⭐ Sentiment Calculation
+  // --------------------------
+  const positiveCount = ratingCounts[5] + ratingCounts[4];
+  const neutralCount = ratingCounts[3];
+  const negativeCount = ratingCounts[2] + ratingCounts[1];
+
+  const positivePercent = Number(
+    ((positiveCount / totalFeedback) * 100).toFixed(1)
+  );
+
+  // -------------------------
+  // ⭐ Growth Rate Calculation
+  // -------------------------
+  const now = dayjs();
+
+  const thirtyDaysAgo = now.subtract(30, "day");
+  const sixtyDaysAgo = now.subtract(60, "day");
+
+  const feedbacksThisMonth = feedbacks.filter((f: any) =>
+    dayjs(f.createdAt).isAfter(thirtyDaysAgo)
+  ).length;
+
+  const feedbacksLastMonth = feedbacks.filter((f: any) => {
+    const d = dayjs(f.createdAt);
+    return d.isAfter(sixtyDaysAgo) && d.isBefore(thirtyDaysAgo);
+  }).length;
+
+  let growthRate = 0;
+  if (feedbacksLastMonth > 0) {
+    growthRate =
+      ((feedbacksThisMonth - feedbacksLastMonth) / feedbacksLastMonth) * 100;
+  } else if (feedbacksThisMonth > 0) {
+    growthRate = 100;
+  }
+
+  growthRate = Number(growthRate.toFixed(2));
+
+  // -------------------------
+  // ⭐ Rating Distribution
+  // -------------------------
+  const ratingDistribution = [
+    { name: "5★", value: ratingCounts[5], fill: "#10B981" },
+    { name: "4★", value: ratingCounts[4], fill: "#34D399" },
+    { name: "3★", value: ratingCounts[3], fill: "#6EE7B7" },
+    { name: "2★", value: ratingCounts[2], fill: "#FCD34D" },
+    { name: "1★", value: ratingCounts[1], fill: "#EF4444" },
+  ];
+
+  // -------------------------
+  // ⭐ Sentiment Pie Chart
+  // -------------------------
+  const sentimentData = [
+    { name: "Positive", value: positiveCount, fill: "#10B981" },
+    { name: "Neutral", value: neutralCount, fill: "#6EE7B7" },
+    { name: "Negative", value: negativeCount, fill: "#EF4444" },
+  ];
+
+  // -------------------------
+  // ⭐ Trend Chart Data
+  // -------------------------
+  const trendMap: Record<string, { feedback: number; totalRating: number }> = {};
+
+  feedbacks.forEach((f: any) => {
+    const date = dayjs(f.createdAt).format("MMM DD");
+    if (!trendMap[date]) {
+      trendMap[date] = { feedback: 0, totalRating: 0 };
+    }
+    trendMap[date].feedback++;
+    trendMap[date].totalRating += Number(f.rating);
+  });
+
+  const trendData = Object.keys(trendMap).map((date) => ({
+    date,
+    feedback: trendMap[date].feedback,
+    rating: Number(
+      (trendMap[date].totalRating / trendMap[date].feedback).toFixed(1)
+    ),
+  }));
+
+  return {
+    totalFeedback,
+    avgRating,
+    positivePercent,
+    growthRate,
+    ratingDistribution,
+    sentimentData,
+    ratingCounts,
+    positiveCount,
+    neutralCount,
+    negativeCount,
+    trendData,
+  };
+}, [feedbacks]);
+
 
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="relative overflow-hidden border-b border-emerald-100 bg-gradient-to-r from-white via-emerald-50/60 to-emerald-100/30 backdrop-blur-md">
+      <div className="relative overflow-hidden border-b border-emerald-100 bg-linear-to-r from-white via-emerald-50/60 to-emerald-100/30 backdrop-blur-md">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(16,185,129,0.15),transparent_70%)] pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-6 py-10">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             {/* Left Section */}
             <div>
-              <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-emerald-800 tracking-tight">
+              <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-linear-to-r from-emerald-600 to-emerald-800 tracking-tight">
                 Feedback Analytics
               </h1>
               <p className="text-emerald-700/70 mt-2 text-lg font-medium">
@@ -243,7 +277,7 @@ export function FeedbackAnalytics({websiteId}: {websiteId: string}) {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto py-12">
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 ">
           <KPICard
@@ -281,9 +315,9 @@ export function FeedbackAnalytics({websiteId}: {websiteId: string}) {
         </div>
 
         {/* Main Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 mb-8">
           {/* Rating Trend */}
-          <Card className="lg:col-span-2">
+          <Card className="lg:col-span-3">
             <CardHeader>
               <CardTitle>Feedback & Rating Trend</CardTitle>
               <CardDescription>
@@ -342,7 +376,7 @@ export function FeedbackAnalytics({websiteId}: {websiteId: string}) {
           </Card>
 
           {/* Sentiment Pie */}
-          <Card>
+          <Card className="col-span-2">
             <CardHeader>
               <CardTitle>Sentiment Breakdown</CardTitle>
               <CardDescription>
@@ -358,7 +392,7 @@ export function FeedbackAnalytics({websiteId}: {websiteId: string}) {
                       cx="50%"
                       cy="50%"
                       labelLine={false}
-                      label={({ name, value, percent }) => `${name} ${value}`}
+                      label={({ name, value}) => `${name} ${value}`}
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
@@ -378,7 +412,7 @@ export function FeedbackAnalytics({websiteId}: {websiteId: string}) {
         {/* Rating Distribution & Detailed Stats */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Rating Distribution Bar */}
-          <Card className="bg-gradient-to-br from-white to-emerald-50 border-emerald-100 shadow-lg hover:shadow-emerald-200 transition-all duration-300">
+          <Card className="bg-linear-to-br from-white to-emerald-50 border-emerald-100 shadow-lg hover:shadow-emerald-200 transition-all duration-300">
             <CardHeader>
               <CardTitle className="text-emerald-700 text-xl font-bold flex items-center gap-2">
                 ⭐ Rating Distribution
