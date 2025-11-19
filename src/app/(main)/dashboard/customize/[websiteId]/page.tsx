@@ -9,7 +9,7 @@ const CustomizePage = () => {
   const { websiteId } = useParams();
 
   return (
-    <div className="p-6 w-full">
+    <div className="p-6 ml-22">
       <Tabs defaultValue="form" className="w-full">
         {/* Tab Buttons */}
         <TabsList className="w-full flex gap-2">

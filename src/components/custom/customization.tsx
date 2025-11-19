@@ -166,7 +166,7 @@ export default function FeedbackCustomizer({websiteId}: {websiteId: string}) {
               </label>
               <input
                 type={type}
-                value={styles[key as keyof FormStyles] as string | number}
+                value={styles[key as keyof FormStyles] as string | number ?? ""}
                 onChange={(e) =>
                   updateStyle(
                     key as keyof FormStyles,
