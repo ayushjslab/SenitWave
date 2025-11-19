@@ -180,7 +180,6 @@
        !hex.startsWith("#") ||
        hex.length !== 7
      ) {
-       // fallback to default color
        hex = "#000000";
      }
      const r = parseInt(hex.slice(1, 3), 16);

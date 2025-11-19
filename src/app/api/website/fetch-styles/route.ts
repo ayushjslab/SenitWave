@@ -38,6 +38,7 @@ export async function GET(req: NextRequest) {
         success: true,
         message: "Styles fetched successfully",
         formStyles: website.formStyles || null,
+        buttonStyles: website.buttonStyles || null
       })
     );
   } catch (err) {
